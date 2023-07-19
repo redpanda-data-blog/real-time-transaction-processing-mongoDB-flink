@@ -1,0 +1,5 @@
+{ "transactionId": "TXN001", "timestamp": "2023-06-28T10:15:00", "accountId": "ACC001", "amount": 250.75, "merchantId": "MERC001", "location": "New York", "category": "Shopping" }
+{ "transactionId": "TXN002", "timestamp": "2023-06-28T12:30:45", "accountId": "ACC002", "amount": 1000.00, "merchantId": "MERC002", "location": "San Francisco", "category": "Travel"}
+{ "transactionId": "TXN003", "timestamp": "2023-06-28T15:45:20", "accountId": "ACC001", "amount": 500.00, "merchantId": "MERC003", "location": "London", "category": "Shopping" }
+{ "transactionId": "TXN004", "timestamp": "2023-06-28T18:20:10", "accountId": "ACC003", "amount": 150.50, "merchantId": "MERC004", "location": "Paris", "category": "Dining" }
+{ "transactionId": "TXN005", "timestamp": "2023-06-28T20:05:30", "accountId": "ACC001", "amount": 1000.00, "merchantId": "MERC002", "location": "San Francisco", "category": "Travel"}

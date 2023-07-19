@@ -1,0 +1,69 @@
+---
+version: "3.7"
+networks:
+  redpanda_network:
+    driver: bridge
+volumes:
+  redpanda-0: null
+services:
+  redpanda-0:
+    hostname: redpanda-0
+    command:
+      - redpanda
+      - start
+      - --smp
+      - '1'
+      - --reserve-memory
+      - 0M
+      - --overprovisioned
+      - --node-id
+      - '0'
+      - --kafka-addr
+      - PLAINTEXT://redpanda-0:29092,OUTSIDE://redpanda-0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda-0:29092,OUTSIDE://redpanda-0:9092
+
+    image: docker.redpanda.com/redpandadata/redpanda:v23.1.11
+    container_name: redpanda-0
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+
+    volumes:
+      - redpanda-0:/var/lib/redpanda/data
+
+  flink-job-manager:
+    container_name: flink-job-manager
+    image: apache/flink:1.17.1
+    ports:
+      - "8081:8081"
+    environment:
+      - REDPANDA_HOST=localhost:9092
+      - MONGODB_HOST=mongodb://mongo:27017
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-job-manager
+    volumes:
+      - ./flink-job:/opt/flink/jobs/
+    command: jobmanager
+
+  flink-taskmanager:
+    container_name: flink-taskmanager
+    image: apache/flink:1.17.1
+    depends_on:
+      - flink-job-manager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-job-manager
+        taskmanager.numberOfTaskSlots: 2
+    command: taskmanager
+
+  mongo:
+    container_name: mongo
+    image: mongo:6.0.6
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
+
